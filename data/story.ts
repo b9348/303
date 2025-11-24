@@ -124,14 +124,24 @@ export const STORY: Record<string, Scene> = {
   'hallway_start': {
     id: 'hallway_start',
     title: '第二章：回形楼道',
-    text: `你冲进走廊，空气中弥漫着浓烈的铁锈味和烧焦的纸灰味。${BR}这里是三楼。两侧的房门紧闭，门上贴满了褪色的“福”字——全部是倒着贴的，红得刺眼，不像是在祈福，倒像是在镇压着屋里的什么东西。${BR}那部红色的公用电话就挂在左手边的墙上，听筒垂在半空，像吊死之人的舌头一样晃荡。${BR}雨衣人不见了，只留下一滩水渍。${BR}你的右手边是公用厨房，里面传出剁肉的声音。左手边是302室，门缝里塞满了诡异的符纸。`,
+    text: `你冲进走廊，空气中弥漫着浓烈的铁锈味和烧焦的纸灰味。${BR}这里是三楼。两侧的房门紧闭，门上贴满了褪色的“福”字——全部是倒着贴的，红得刺眼，不像是在祈福，倒像是在镇压着屋里的什么东西。${BR}那部红色的公用电话就挂在左手边的墙上，听筒垂在半空，像吊死之人的舌头一样晃荡。${BR}你的右手边是公用厨房，里面传出剁肉的声音。左手边是302室，门缝里塞满了诡异的符纸。走廊的尽头则是公用盥洗室。${BR}而在通往更深处走廊的必经之路上，立着一道锈迹斑斑的黑色铁栅栏门，上面挂着一把沉重的大锁。`,
     choices: [
+      { id: 'c_open_gate', text: '打开铁栅栏门', nextSceneId: 'hallway_mid_transition', requiredItem: '铁门钥匙', type: 'normal' },
+      { id: 'c_check_gate', text: '检查铁栅栏门', nextSceneId: 'gate_locked', hideIfItem: '铁门钥匙', type: 'normal' },
       { id: 'c_phone', text: '接听电话', nextSceneId: 'phone_call', type: 'investigate', hideIfItem: '古铜钱' },
       { id: 'c_kitchen', text: '进入公用厨房', nextSceneId: 'kitchen_enter', type: 'investigate' },
       { id: 'c_302', text: '敲302的门', nextSceneId: 'room_302_knock', type: 'normal' },
       { id: 'c_washroom', text: '去走廊尽头的盥洗室', nextSceneId: 'washroom_enter', type: 'normal' },
     ],
     backgroundStyle: 'bg-red-950/20',
+  },
+  'gate_locked': {
+    id: 'gate_locked',
+    title: '被锁死的路',
+    text: `你用力推了推铁栅栏门，纹丝不动。${BR}锁芯里似乎被灌注了某种红色的蜡状物，散发着腥气。这把锁不是用来防贼的，是用来防里面东西出来的。${BR}你透过栅栏缝隙看向深处，那边似乎更黑，隐约能看到304和305的门牌号，以及绿色的烛光。${BR}你需要一把钥匙。`,
+    choices: [
+      { id: 'c_back_hall', text: '回头寻找线索', nextSceneId: 'hallway_start', type: 'normal' },
+    ],
   },
   'phone_call': {
     id: 'phone_call',
@@ -190,11 +200,11 @@ export const STORY: Record<string, Scene> = {
   'washroom_enter': {
     id: 'washroom_enter',
     title: '公共盥洗室',
-    text: `推开盥洗室的门，一股阴冷的湿气扑面而来，夹杂着下水道的腐臭。${BR}地砖上积着一层浑浊的黑水，倒映着天花板上摇摇欲坠、滋滋作响的灯管。${BR}这里有一排生锈的水龙头，其中一个没关紧，正滴着水。${BR}滴答……滴答……${BR}水槽的下水口似乎堵住了，积满了黑水。${BR}角落的脏衣篓里，露出了一只破旧布娃娃的手臂。`,
+    text: `推开盥洗室的门，一股阴冷的湿气扑面而来，夹杂着下水道的腐臭。${BR}地砖上积着一层浑浊的黑水，倒映着天花板上摇摇欲坠、滋滋作响的灯管。${BR}这里有一排生锈的水龙头，其中一个没关紧，正滴着水。${BR}滴答……滴答……${BR}水槽的下水口仿佛通向深渊。${BR}角落的脏衣篓里，露出了一只破旧布娃娃的手臂。`,
     choices: [
       { id: 'c_sink', text: '检查水槽', nextSceneId: 'sink_event', type: 'investigate', hideIfItem: '铁门钥匙' },
       { id: 'c_doll', text: '捡起布娃娃', nextSceneId: 'doll_get', type: 'normal', hideIfItem: '破旧布娃娃' },
-      { id: 'c_leave', text: '离开这里', nextSceneId: 'hallway_mid_transition', type: 'normal' },
+      { id: 'c_leave', text: '离开这里', nextSceneId: 'hallway_start', type: 'normal' },
     ],
   },
   'doll_get': {
@@ -228,9 +238,9 @@ export const STORY: Record<string, Scene> = {
   'water_ghost_fire': {
     id: 'water_ghost_fire',
     title: '死里逃生',
-    text: `黑发缠上你手腕的瞬间，你掏出父亲的打火机，狠狠按了下去！${BR}“轰！”${BR}微弱的火苗在接触到头发的瞬间，竟然像遇到了汽油一样爆燃。${BR}伴随着一声凄厉的、不似人声的尖叫，头发像触电般缩回了下水道。${BR}但因为距离太近，你的手也被严重烧伤。${BR}恶臭的黑烟腾起。你忍痛抓起那把钥匙，跌跌撞撞地退到了门口。`,
+    text: `黑发缠上你手腕的瞬间，你掏出父亲的打火机，狠狠按了下去！${BR}“轰！”${BR}微弱的火苗在接触到头发的瞬间，竟然像遇到了汽油一样爆燃。${BR}伴随着一声凄厉的、不似人声的尖叫，头发像触电般缩回了下水道。${BR}但因为距离太近，你的手也被严重烧伤。${BR}恶臭的黑烟腾起。你忍痛抓起那把钥匙，退到了盥洗室门口。`,
     choices: [
-      { id: 'c_flee', text: '逃离盥洗室', nextSceneId: 'hallway_mid_transition', getItem: '铁门钥匙', type: 'danger' },
+      { id: 'c_flee', text: '查看状况', nextSceneId: 'washroom_enter', getItem: '铁门钥匙', type: 'danger' },
     ],
     visualEffect: 'shake',
     soundCue: '[ 获得物品：铁门钥匙 | 状态：受伤 ]',
@@ -240,7 +250,7 @@ export const STORY: Record<string, Scene> = {
     title: '驱邪',
     text: `你想起302怪人的话，“盐克木”？不，盐能驱邪。${BR}你抓起一把粗盐，狠狠撒向水槽。${BR}“滋啦——！”${BR}就像把水倒进了滚油里，黑水剧烈沸腾起来，冒出腥臭的白烟。${BR}水下的东西似乎极其痛苦，疯狂地拍打着水槽壁，然后迅速退缩回了下水道深处。${BR}黑发散开，沉入水底。${BR}你从容地伸手，拿起了那把钥匙。没有受到任何攻击。`,
     choices: [
-      { id: 'c_leave_smart', text: '离开盥洗室', nextSceneId: 'hallway_mid_transition', getItem: '铁门钥匙', type: 'normal' },
+      { id: 'c_leave_smart', text: '收起钥匙', nextSceneId: 'washroom_enter', getItem: '铁门钥匙', type: 'normal' },
     ],
     effect: (state) => ({ ...state, sanity: Math.min(100, state.sanity + 10) }),
     soundCue: '[ 获得物品：铁门钥匙 | 理智 +10 ]',
@@ -252,7 +262,7 @@ export const STORY: Record<string, Scene> = {
   'hallway_mid_transition': {
     id: 'hallway_mid_transition',
     title: '走廊深处',
-    text: `拿到钥匙并不是结束，只是开始。${BR}越往里走，光线越暗，仿佛被黑暗吞噬。空气中那股线香的味道浓烈得呛人。${BR}楼道变得更加狭窄，墙壁上的霉斑组成了扭曲的人脸形状。${BR}前方有两条路：${BR}右手边是304室，门框上挂着惨白的挽联，门虚掩着，透出摇曳的绿光。${BR}左手边是305室，门板焦黑，那是曾经发生过火灾的地方。${BR}而尽头，是向下的楼梯。`,
+    text: `用钥匙打开铁门后，沉重的吱呀声在楼道里回荡，仿佛打破了某种封印。${BR}越往里走，光线越暗，仿佛被黑暗吞噬。空气中那股线香的味道浓烈得呛人。${BR}楼道变得更加狭窄，墙壁上的霉斑组成了扭曲的人脸形状。${BR}前方有两条路：${BR}右手边是304室，门框上挂着惨白的挽联，门虚掩着，透出摇曳的绿光。${BR}左手边是305室，门板焦黑，那是曾经发生过火灾的地方。${BR}而尽头，是向下的楼梯。`,
     choices: [
       { id: 'c_304', text: '进入304室（灵堂）', nextSceneId: 'room_304_enter', type: 'danger' },
       { id: 'c_305', text: '进入305室（哭声）', nextSceneId: 'room_305_enter', type: 'investigate', hideIfFlag: 'girl_saved' },
